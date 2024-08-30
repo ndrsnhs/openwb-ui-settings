@@ -22,7 +22,11 @@
 			@update:model-value="
 				updateConfiguration($event, 'configuration.port')
 			"
-		/>
+		>
+			<template #help>
+				Die Standard-Portnummer von Saxpower ist je nach Firmwareversion 3600 (alt) oder 502 (neu).
+			</template>
+		</openwb-base-number-input>
 		<openwb-base-number-input
 			title="Modbus ID"
 			required
