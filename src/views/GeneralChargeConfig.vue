@@ -71,7 +71,8 @@
               Wenn diese Option aktiviert ist, werden bis zu zwei Umschaltversuche vorgenommen, wenn die vorgegebene und
               genutzte Phasenzahl nicht übereinstimmen. Wird die Option deaktiviert, wird nur eine Umschaltung
               durchgeführt.<br />
-              Die gezählten Fehlversuche werden beim nächsten Wechsel des Lademodus oder mit dem Abstecken zurückgesetzt.
+              Die gezählten Fehlversuche werden beim nächsten Wechsel des Lademodus oder mit dem Abstecken
+              zurückgesetzt.
             </template>
           </openwb-base-button-group-input>
           <openwb-base-number-input
@@ -213,19 +214,19 @@
             <openwb-base-heading class="mt-0"> Speicher-Entladung ins Fahrzeug steuern </openwb-base-heading>
             <div v-if="$store.state.mqtt['openWB/bat/get/power_limit_controllable'] === true">
               <openwb-base-button-group-input
-                title="Speicher-Entladung"
+                title="Speichersteuerung"
                 :buttons="[
                   {
                     buttonValue: 'no_limit',
-                    text: 'immer',
+                    text: 'Aus',
                   },
                   {
                     buttonValue: 'limit_stop',
-                    text: 'gesperrt, wenn Fahrzeug lädt',
+                    text: 'volle Entladesperre',
                   },
                   {
                     buttonValue: 'limit_to_home_consumption',
-                    text: 'für Hausverbrauch',
+                    text: 'Entladung in Fahrzeuge sperren',
                   },
                 ]"
                 :model-value="$store.state.mqtt['openWB/bat/config/power_limit_mode']"
