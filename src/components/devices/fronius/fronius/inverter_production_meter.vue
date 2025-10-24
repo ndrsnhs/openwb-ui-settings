@@ -1,5 +1,5 @@
 <template>
-  <div class="device-fronius-inverter-counter-production">
+  <div class="device-fronius-inverter-production-meter">
     <openwb-base-heading> Einstellungen für Fronius Erzeugerzähler </openwb-base-heading>
     <openwb-base-select-input
       title="Kompatibilitätsmodus"
@@ -49,7 +49,7 @@
 import ComponentConfigMixin from "../../ComponentConfigMixin.vue";
 
 export default {
-  name: "DeviceFroniusProductionCounter",
+  name: "DeviceFroniusProductionMeter",
   mixins: [ComponentConfigMixin],
   computed: {
     meterRealtimeUrl: {
