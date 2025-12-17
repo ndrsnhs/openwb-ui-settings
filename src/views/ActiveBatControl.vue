@@ -375,8 +375,8 @@
               >
                 <template #help>
                   <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'mode_no_discharge'">
-                    Die Speicherentladung wird komplett gesperrt, sobald ein Fahrzeug lädt! Alle Verbraucher
-                    (Fahrzeuge, Hausverbrauch) werden durch Netzstrom und ggfs. vorhandenen PV-Überschuss versorgt.
+                    Die Speicherentladung wird komplett gesperrt und alle Verbraucher (Fahrzeuge/ Hausverbrauch)
+                    durch Netzbezug gedeckt. Ist mehr PV-Überschuss als verbrauch vorhanden lädt der Speicher (Eigenregelung).
                   </div>
                   <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'mode_discharge_home_consumption'">
                     Fahrzeugladung die nicht durch PV-Überschuss gedeckt werden kann erzeugt Netzbezug statt Speicherentladung.
@@ -385,8 +385,8 @@
                     "volle Entladesperre".            
                   </div>
                   <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'mode_charge_pv_production'">
-                    PV-Ertrag wird vorrangig in den Speicher geladen. Weiterer Verbrauch
-                    (Hausverbrauch/ Fahrzeugladung) erzeugt Netzbezug.
+                    PV-Ertrag wird vorrangig in den Speicher geladen. Weiterer Verbrauch (Hausverbrauch/ Fahrzeugladung)
+                    erzeugt Netzbezug.
                   </div>
                 </template>
               </openwb-base-button-group-input>
@@ -405,23 +405,26 @@
                     buttonValue: 'price_limit',
                     text: 'Preisgrenze',
                   },
+                  {
+                    buttonValue: 'scheduled',
+                    text: 'Zielladen',
+                  },
                 ]"
                 :model-value="$store.state.mqtt['openWB/bat/config/power_limit_condition']"
                 @update:model-value="updateState('openWB/bat/config/power_limit_condition', $event)"
               >
                 <template #help>
                   <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'manual'">
-                    Die Speicherentladung wird komplett gesperrt, sobald ein Fahrzeug lädt! Alle Verbraucher
-                    (Fahrzeuge, Hausverbrauch) werden durch Netzstrom und ggfs. vorhandenen PV-Überschuss versorgt.
+                    Manuell
                   </div>
                   <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'vehicle_charging'">
-                    Fahrzeugladung die nicht durch PV-Überschuss gedeckt werden kann erzeugt Netzbezug statt Speicherentladung.
-                    Weitere Verbraucher (bspw. Hausverbrauch) werden durch den Speicher ausgeglichen.
-                    Kann die Entladung am Speicher nur komplett gesperrt werden, verhält sich diese Einstellung wie
-                    "volle Entladesperre".            
+                    Fahrzeuge angesteckt        
                   </div>
                   <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'price_limit'">
-                    PV-Ertrag wird vorrangig in den Speicher geladen. Weiterer Verbrauch erzeugt Netzbezug.
+                    definierte Preisgrenzen
+                  </div>
+                  <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'scheduled'">
+                    Zielladen.
                   </div>
                 </template>
               </openwb-base-button-group-input>
@@ -534,6 +537,59 @@
                   @update:model-value="updateState('openWB/bat/config/charge_limit', parseFloat(($event / 100000).toFixed(7)))"
                 />
               </div>
+              <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'scheduled'">
+                <openwb-base-heading class="mt-0"> Zielladen </openwb-base-heading>
+                
+
+                <openwb-base-card
+                  :collapsible="true"
+                  :collapsed="true"
+                  subtype="secondary"
+                >
+                  <template #header> Ladepläne </template>
+                  
+                  
+                  <openwb-base-heading>
+                    Zielladepläne
+                    <template #actions>
+                      <openwb-base-avatar
+                        class="bg-success clickable"
+                        title="Neuen Zielladen-Plan hinzufügen"
+                        @click.stop="addBatControlSchedulePlan()"
+                      >
+                        <font-awesome-icon :icon="['fas', 'plus']" />
+                      </openwb-base-avatar>
+                    </template>
+                    <template #help>
+                      Hilfe!
+                    </template>
+                  </openwb-base-heading>
+                  <openwb-base-alert
+                    v-if="Object.keys(chargingPlans).length == 0"
+                    subtype="info"
+                  >
+                    Es wurden noch keine Pläne für das Zielladen angelegt.
+                  </openwb-base-alert>
+                  <div v-for="(plan, planKey) in chargingPlans">
+                    Plan {{ plan }}
+                    planKey {{ planKey }}
+                  </div>
+                  <bat-control-scheduled-charging-plan
+                    v-for="(plan, planKey) in chargingPlans"
+                    :key="planKey"
+                    :model-value="plan"
+                    @update:model-value="updateState('openWB/bat/config/scheduled_charging_plans', $event, `${plan}`)"
+                    @send-command="$emit('sendCommand', $event)"
+                  />
+                
+                
+                </openwb-base-card>
+
+
+
+
+
+              </div>
             </div>
             <div v-else>
               <openwb-base-alert subtype="info">
@@ -564,6 +620,7 @@ import {
   faBatteryHalf as fasBatteryHalf,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import BatControlScheduledChargingPlan from "../components/bat_control/BatControlScheduledChargingPlan.vue";
 
 library.add(fasCarBattery, fasCarSide, fasBatteryHalf);
 
@@ -571,6 +628,7 @@ export default {
   name: "OpenwbPVChargeConfigView",
   components: {
     FontAwesomeIcon,
+    BatControlScheduledChargingPlan,
   },
   mixins: [ComponentState],
   emits: ["save", "reset", "defaults"],
@@ -601,6 +659,7 @@ export default {
         "openWB/bat/config/charge_limit",
         "openWB/system/device/+/component/+/config",
         "openWB/bat/+/get/power_limit_controllable",
+        "openWB/bat/config/scheduled_charging_plans",
       ],
     };
   },
@@ -640,6 +699,15 @@ export default {
           return false;
         }
         return Object.keys(this.filterNormalBatteries(this.getWildcardTopics("openWB/system/device/+/component/+/config"))).length > 0;
+      },
+    },
+    chargingPlans: {
+      get() {
+        if (this.$store.state.mqtt["openWB/bat/config/scheduled_charging_plans"] === undefined) {
+          return {};
+
+        }
+        return this.$store.state.mqtt["openWB/bat/config/scheduled_charging_plans"];
       },
     },
   },
@@ -682,6 +750,13 @@ export default {
             [key]: components[key],
           };
         }, {});
+    },
+    /* charge template schedule plan management */
+    addBatControlSchedulePlan(templateId) {
+      this.$emit("sendCommand", {
+        command: "addBatControlSchedulePlan",
+        data: {},
+      });
     },
   },
 };
