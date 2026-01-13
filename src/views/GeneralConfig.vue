@@ -5,7 +5,7 @@
         <openwb-base-alert subtype="info">
           <p>
             Wird für den Steuerungsmodus "primary" gewählt, übernimmt diese openWB die alleinige Regelung und steuert
-            ggf. vorhandene weitere openWB (z.B. secondary openWB, openWB Pro, Satellit u.a.) fern. Sie werden in den
+            ggf. vorhandene weitere openWB (z.B. secondary openWB, openWB Pro, Satellit u.a.) fern. Diese werden in den
             Ladepunkt-Einstellungen der primary-openWB hinzugefügt.
           </p>
           <p>
@@ -236,7 +236,7 @@
               <p>
                 Eine ausführliche Erläuterung mit Beispielen findet Ihr im
                 <a
-                  href="https://wiki.openwb.de/doku.php?id=openwb:software:bedienung:temporaere-persistente-ladeprofile"
+                  href="https://wiki.openwb.de/doku.php?id=openwb:vc:2.1.9:software:einstell-konfig:einstellungen:allgemein#temporaere_ladeeinstellungen"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -624,6 +624,75 @@
             <template #title>
               <font-awesome-icon :icon="['fas', 'charging-station']" />
               Zählerstand bei Ladeende
+            </template>
+          </openwb-base-button-group-input>
+          <openwb-base-button-group-input
+            :buttons="[
+              {
+                buttonValue: false,
+                text: 'Nein',
+                class: 'btn-outline-danger',
+              },
+              {
+                buttonValue: true,
+                text: 'Ja',
+                class: 'btn-outline-success',
+              },
+            ]"
+            :model-value="$store.state.mqtt['openWB/general/charge_log_data_config']?.data_exported_since_mode_switch"
+            @update:model-value="
+              updateState('openWB/general/charge_log_data_config', $event, 'data_exported_since_mode_switch')
+            "
+          >
+            <template #title>
+              <font-awesome-icon :icon="['fas', 'charging-station']" />
+              Entladene Energie
+            </template>
+          </openwb-base-button-group-input>
+          <openwb-base-button-group-input
+            :buttons="[
+              {
+                buttonValue: false,
+                text: 'Nein',
+                class: 'btn-outline-danger',
+              },
+              {
+                buttonValue: true,
+                text: 'Ja',
+                class: 'btn-outline-success',
+              },
+            ]"
+            :model-value="$store.state.mqtt['openWB/general/charge_log_data_config']?.chargepoint_exported_at_start"
+            @update:model-value="
+              updateState('openWB/general/charge_log_data_config', $event, 'chargepoint_exported_at_start')
+            "
+          >
+            <template #title>
+              <font-awesome-icon :icon="['fas', 'charging-station']" />
+              Zählerstand bei Entladebeginn
+            </template>
+          </openwb-base-button-group-input>
+          <openwb-base-button-group-input
+            :buttons="[
+              {
+                buttonValue: false,
+                text: 'Nein',
+                class: 'btn-outline-danger',
+              },
+              {
+                buttonValue: true,
+                text: 'Ja',
+                class: 'btn-outline-success',
+              },
+            ]"
+            :model-value="$store.state.mqtt['openWB/general/charge_log_data_config']?.chargepoint_exported_at_end"
+            @update:model-value="
+              updateState('openWB/general/charge_log_data_config', $event, 'chargepoint_exported_at_end')
+            "
+          >
+            <template #title>
+              <font-awesome-icon :icon="['fas', 'charging-station']" />
+              Zählerstand bei Entladeende
             </template>
           </openwb-base-button-group-input>
           <!-- <openwb-base-button-group-input

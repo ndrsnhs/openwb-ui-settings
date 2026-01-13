@@ -7,7 +7,7 @@
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="removeVehicle($event, modalVehicleIndex)"
   >
-    Wollen Sie das Fahrzeug "{{ getVehicleName(modalVehicleIndex) }}" wirklich entfernen? Dieser Vorgang kann nicht
+    Willst Du das Fahrzeug "{{ getVehicleName(modalVehicleIndex) }}" wirklich entfernen? Dieser Vorgang kann nicht
     rückgängig gemacht werden!
   </openwb-base-modal-dialog>
   <openwb-base-modal-dialog
@@ -17,7 +17,7 @@
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="removeEvTemplate($event, modalEvTemplateIndex)"
   >
-    Wollen Sie das Fahrzeug-Profil "{{ getEvTemplateName(modalEvTemplateIndex) }}" wirklich entfernen? Dieser Vorgang
+    Willst Du das Fahrzeug-Profil "{{ getEvTemplateName(modalEvTemplateIndex) }}" wirklich entfernen? Dieser Vorgang
     kann nicht rückgängig gemacht werden!
   </openwb-base-modal-dialog>
   <openwb-base-modal-dialog
@@ -27,8 +27,8 @@
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="removeChargeTemplate($event, modalChargeTemplateIndex)"
   >
-    Wollen Sie das Lade-Profil "{{ getChargeTemplateName(modalChargeTemplateIndex) }}" wirklich entfernen? Dieser
-    Vorgang kann nicht rückgängig gemacht werden!
+    Willst Du das Lade-Profil "{{ getChargeTemplateName(modalChargeTemplateIndex) }}" wirklich entfernen? Dieser Vorgang
+    kann nicht rückgängig gemacht werden!
   </openwb-base-modal-dialog>
   <!-- main content -->
   <div class="vehicleConfig">
@@ -850,7 +850,7 @@
                 :buttons="[
                   {
                     buttonValue: 'none',
-                    text: 'Aus',
+                    text: 'Keine',
                   },
                   {
                     buttonValue: 'soc',
@@ -976,7 +976,7 @@
                 :buttons="[
                   {
                     buttonValue: 'none',
-                    text: 'Aus',
+                    text: 'Keine',
                   },
                   {
                     buttonValue: 'soc',
@@ -1154,10 +1154,8 @@
                   Ist der berechnete Zeitpunkt des Ladestarts noch nicht erreicht, wird mit Überschuss geladen. Auch
                   nach Erreichen des Ziel-SoCs wird mit Überschuss geladen, solange bis das "SoC-Limit für das Fahrzeug"
                   erreicht wird.<br />
-                  Es wird nach den Vorgaben des Zeitplans geladen, dessen Zieltermin am nächsten liegt. Ist der
-                  Zielzeitpunkt vorbei, wird solange geladen bis, das Ziel erreicht oder das Auto abgesteckt wird. Wenn
-                  der Ziel-Termin des nächsten Plans innerhalb der nächsten 12 Stunden liegt, wird auf den nächsten Plan
-                  umgeschaltet.
+                  Es wird nach den Vorgaben des Zeitplans geladen, dessen Zieltermin am nächsten liegt, bis max 20
+                  Minuten nach dem angegebenen Zieltermin.
                 </template>
               </openwb-base-heading>
               <openwb-base-alert
@@ -1234,7 +1232,7 @@
                 :buttons="[
                   {
                     buttonValue: 'none',
-                    text: 'Aus',
+                    text: 'Keine',
                   },
                   {
                     buttonValue: 'soc',
