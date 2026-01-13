@@ -221,8 +221,8 @@
             <template #chargepoint_serial_number="data">
               {{ dashIfNotSet(data.value.chargepoint_serial_number) }}
             </template>
-            <template #mid_meter="data">
-              {{ dashIfNotSet(data.value.mid_meter) }}
+            <template #chargepoint_mid_meter="data">
+              {{ formatBool(data.value.chargepoint_mid_meter) }}
             </template>
             <template #data_imported_since_mode_switch="data">
               <div class="td-end">
@@ -459,6 +459,11 @@ export default {
             sortable: true,
           },
           {
+            label: "MID Eichung",
+            field: "chargepoint_mid_meter",
+            sortable: true,
+          },
+          {
             label: "Energie",
             field: "data_imported_since_mode_switch",
             sortable: true,
@@ -594,6 +599,7 @@ export default {
               chargepoint_exported_at_start: entry["chargepoint"]["exported_at_start"],
               chargepoint_exported_at_end: entry["chargepoint"]["exported_at_end"],
               chargepoint_serial_number: entry["chargepoint"]["serial_number"],
+              chargepoint_mid_meter: entry["chargepoint"]["mid_meter"],
               vehicle_id: entry["vehicle"]["id"],
               vehicle_name: entry["vehicle"]["name"],
               vehicle_chargemode: this.translateChargeMode(entry["vehicle"]["chargemode"]),
@@ -657,6 +663,7 @@ export default {
             '"Ladepunkt"',
             '"Ladepunkt-ID"',
             '"Zähler Seriennummer"',
+            '"Zähler MID Eichung"',
             '"Geladene Energie"',
             '"Entladene Energie"',
             '"Reichweite"',
@@ -691,6 +698,7 @@ export default {
             '"' + row.chargepoint_name + '"',
             row.chargepoint_id,
             row.chargepoint_serial_number == undefined ? "" : '"' + row.chargepoint_serial_number + '"',
+            '"' + this.formatBool(row.chargepoint_mid_meter)+ '"',
             this.formatNumber(row.data_imported_since_mode_switch / 1000, 2),
             this.formatNumber((row.data_exported_since_mode_switch || 0) / 1000, 2),
             this.formatNumber(row.data_range_charged, 0),

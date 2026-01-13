@@ -571,9 +571,9 @@
                 class: 'btn-outline-success',
               },
             ]"
-            :model-value="$store.state.mqtt['openWB/general/charge_log_data_config']?.mid_meter"
+            :model-value="$store.state.mqtt['openWB/general/charge_log_data_config']?.chargepoint_mid_meter"
             @update:model-value="
-              updateState('openWB/general/charge_log_data_config', $event, 'mid_meter')
+              updateState('openWB/general/charge_log_data_config', $event, 'chargepoint_mid_meter')
             "
           >
             <template #title>
