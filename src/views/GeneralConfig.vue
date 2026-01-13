@@ -557,6 +557,32 @@
               Seriennummer
             </template>
           </openwb-base-button-group-input>
+
+          <openwb-base-button-group-input
+            :buttons="[
+              {
+                buttonValue: false,
+                text: 'Nein',
+                class: 'btn-outline-danger',
+              },
+              {
+                buttonValue: true,
+                text: 'Ja',
+                class: 'btn-outline-success',
+              },
+            ]"
+            :model-value="$store.state.mqtt['openWB/general/charge_log_data_config']?.mid_meter"
+            @update:model-value="
+              updateState('openWB/general/charge_log_data_config', $event, 'mid_meter')
+            "
+          >
+            <template #title>
+              <font-awesome-icon :icon="['fas', 'charging-station']" />
+              MID Eichung
+            </template>
+          </openwb-base-button-group-input>
+
+
           <openwb-base-button-group-input
             :buttons="[
               {

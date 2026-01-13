@@ -221,6 +221,9 @@
             <template #chargepoint_serial_number="data">
               {{ dashIfNotSet(data.value.chargepoint_serial_number) }}
             </template>
+            <template #mid_meter="data">
+              {{ dashIfNotSet(data.value.mid_meter) }}
+            </template>
             <template #data_imported_since_mode_switch="data">
               <div class="td-end">
                 <span class="no-wrap">
